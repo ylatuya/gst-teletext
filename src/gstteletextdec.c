@@ -1050,7 +1050,8 @@ gst_teletextdec_extract_data_units (GstTeletextDec * teletext,
 
         if (G_UNLIKELY (data_unit_length != 1 + 1 + 42)) {
           /* Skip this data unit */
-          GST_WARNING_OBJECT (teletext, "The data unit length is not 44 bytes");
+          GST_WARNING_OBJECT (teletext, "The data unit lenght is not 44 bytes");
+          *offset += 2 + data_unit_lenght;
           break;
         }
 
