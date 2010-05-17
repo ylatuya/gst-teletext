@@ -1005,6 +1005,12 @@ gst_teletextdec_line_address (GstTeletextDec * teletext,
       return VBI_NEW_FRAME;
     }
 
+    /* new segment flag */
+    if (lofp < 0) {
+      GST_LOG_OBJECT (teletext, "New frame");
+      return VBI_NEW_FRAME;
+    }
+
     frame->last_field = field;
     frame->last_field_line = field_line;
     frame->last_frame_line = frame_line;
