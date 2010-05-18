@@ -1107,6 +1107,7 @@ gst_teletextdec_extract_data_units (GstTeletextDec * teletext,
             data_unit[0] == 44) {
           GST_LOG_OBJECT (teletext, "Corrected data unit");
           *offset -= 1;
+          break;
         }
         /* corrupted stream, increase the offset by one until we sync */
           *offset += 1;
