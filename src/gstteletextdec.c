@@ -1086,6 +1086,18 @@ gst_teletextdec_extract_data_units (GstTeletextDec * teletext,
         break;
       }
 
+      case DATA_UNIT_ZVBI_WSS_CPR1204:
+      case DATA_UNIT_ZVBI_CLOSED_CAPTION_525:
+      case DATA_UNIT_ZVBI_MONOCHROME_SAMPLES_525;
+      case DATA_UNIT_VPS:
+      case DATA_UNIT_WSS:
+      case DATA_UNIT_CLOSED_CAPTION:
+      case DATA_UNIT_MONOCHROME_SAMPLES:
+      {
+        /*Not supported yet */
+        *offset += 2 + data_unit_lenght;
+      }
+
       default:
       {
         /* HACK: In some cases, the data unit is 1 byte smaller making all
@@ -1095,9 +1107,9 @@ gst_teletextdec_extract_data_units (GstTeletextDec * teletext,
             data_unit[0] == 44) {
           GST_LOG_OBJECT (teletext, "Corrected data unit");
           *offset -= 1;
-        } else {
-          *offset += data_unit_length + 2;
         }
+        /* corrupted stream, increase the offset by one until we sync */
+          *offset += 1;
         break;
       }
     }
