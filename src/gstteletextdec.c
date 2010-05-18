@@ -1056,8 +1056,8 @@ gst_teletextdec_extract_data_units (GstTeletextDec * teletext,
 
         if (G_UNLIKELY (data_unit_length != 1 + 1 + 42)) {
           /* Skip this data unit */
-          GST_WARNING_OBJECT (teletext, "The data unit lenght is not 44 bytes");
-          *offset += 2 + data_unit_lenght;
+          GST_WARNING_OBJECT (teletext, "The data unit length is not 44 bytes");
+          *offset += 2 + data_unit_length;
           break;
         }
 
@@ -1088,14 +1088,14 @@ gst_teletextdec_extract_data_units (GstTeletextDec * teletext,
 
       case DATA_UNIT_ZVBI_WSS_CPR1204:
       case DATA_UNIT_ZVBI_CLOSED_CAPTION_525:
-      case DATA_UNIT_ZVBI_MONOCHROME_SAMPLES_525;
+      case DATA_UNIT_ZVBI_MONOCHROME_SAMPLES_525:
       case DATA_UNIT_VPS:
       case DATA_UNIT_WSS:
       case DATA_UNIT_CLOSED_CAPTION:
       case DATA_UNIT_MONOCHROME_SAMPLES:
       {
         /*Not supported yet */
-        *offset += 2 + data_unit_lenght;
+        *offset += 2 + data_unit_length;
       }
 
       default:
