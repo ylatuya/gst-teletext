@@ -1045,7 +1045,7 @@ gst_teletextdec_extract_data_units (GstTeletextDec * teletext,
     switch (data_unit_id) {
       case DATA_UNIT_STUFFING:
       {
-        *offset += 1;
+        *offset += 2 + data_unit_length;
         break;
       }
 
