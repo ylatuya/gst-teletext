@@ -1096,6 +1096,7 @@ gst_teletextdec_extract_data_units (GstTeletextDec * teletext,
       {
         /*Not supported yet */
         *offset += 2 + data_unit_length;
+        break;
       }
 
       default:
