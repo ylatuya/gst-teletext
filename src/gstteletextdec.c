@@ -211,7 +211,7 @@ gst_teletextdec_class_init (GstTeletextDecClass * klass)
   g_object_class_install_property (gobject_class, PROP_SUBS_TEMPLATE,
       g_param_spec_string ("subtitles-template", "Subtitles output template",
           "Output template used to print each one of the subtitles lines",
-          "%s\n", G_PARAM_READWRITE));
+          "%s\\n", G_PARAM_READWRITE));
 }
 
 /* initialize the new element
@@ -241,7 +241,7 @@ gst_teletextdec_init (GstTeletextDec * teletext, GstTeletextDecClass * klass)
   teletext->pageno = 0x100;
   teletext->subno = -1;
   teletext->subtitles_mode = FALSE;
-  teletext->subtitles_template = "%s\n";
+  teletext->subtitles_template = "%s\\n";
 
   teletext->in_timestamp = GST_CLOCK_TIME_NONE;
   teletext->in_duration = GST_CLOCK_TIME_NONE;
