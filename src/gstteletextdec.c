@@ -557,7 +557,7 @@ gst_teletextdec_process_telx_buffer (GstTeletextDec * teletext, GstBuffer * buf)
 {
   guint8 *data = GST_BUFFER_DATA (buf);
   const gint size = GST_BUFFER_SIZE (buf);
-  guint offset = 1;
+  guint offset = 0;
   gint res;
 
   teletext->in_timestamp = GST_BUFFER_TIMESTAMP (buf);
@@ -1101,17 +1101,9 @@ gst_teletextdec_extract_data_units (GstTeletextDec * teletext,
 
       default:
       {
-        /* HACK: In some cases, the data unit is 1 byte smaller making all
-         * the following data units invalids. we try to fix this manually */
-        if ((data_unit[-1] == DATA_UNIT_EBU_TELETEXT_NON_SUBTITLE ||
-                data_unit[-1] == DATA_UNIT_EBU_TELETEXT_SUBTITLE) &&
-            data_unit[0] == 44) {
-          GST_LOG_OBJECT (teletext, "Corrected data unit");
-          *offset -= 1;
-          break;
-        }
         /* corrupted stream, increase the offset by one until we sync */
-          *offset += 1;
+        GST_LOG_OBJECT (teletext, "Corrupted, increasing offset by one");
+        *offset += 1;
         break;
       }
     }
