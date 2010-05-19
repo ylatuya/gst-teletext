@@ -211,7 +211,7 @@ gst_teletextdec_class_init (GstTeletextDecClass * klass)
   g_object_class_install_property (gobject_class, PROP_SUBS_TEMPLATE,
       g_param_spec_string ("subtitles-template", "Subtitles output template",
           "Output template used to print each one of the subtitles lines",
-          "%s\\n", G_PARAM_READWRITE));
+          g_strescape("%s\n", NULL), G_PARAM_READWRITE));
 }
 
 /* initialize the new element
@@ -241,7 +241,7 @@ gst_teletextdec_init (GstTeletextDec * teletext, GstTeletextDecClass * klass)
   teletext->pageno = 0x100;
   teletext->subno = -1;
   teletext->subtitles_mode = FALSE;
-  teletext->subtitles_template = "%s\\n";
+  teletext->subtitles_template = g_strescape("%s\n", NULL);
 
   teletext->in_timestamp = GST_CLOCK_TIME_NONE;
   teletext->in_duration = GST_CLOCK_TIME_NONE;
@@ -606,12 +606,12 @@ static vbi_bool
 gst_teletextdec_convert (vbi_dvb_demux * dx,
     gpointer user_data, const vbi_sliced * sliced, guint n_lines, gint64 pts)
 {
+  gdouble sample_time;
+  vbi_sliced *s;
+
   GstTeletextDec *teletext = GST_TELETEXTDEC (user_data);
 
   GST_DEBUG_OBJECT (teletext, "Converting %u lines to decode", n_lines);
-
-  gdouble sample_time;
-  vbi_sliced *s;
 
   sample_time = pts * (1 / 90000.0);
 
@@ -778,11 +778,12 @@ gst_teletextdec_parse_subtitles_page (GstTeletextDec * teletext,
     vbi_page * page, gchar ** text)
 {
   const gint line_length = page->columns;
-  gchar line[line_length + 1];
+  gchar *line;
   GString *subs;
   gint length, i;
 
   subs = g_string_new ("");
+  line = g_malloc (line_length + 1);
   /* Print lines 2 to 23 */
   for (i = 1; i < 23; i++) {
     vbi_print_page_region (page, line, line_length + 1, "UTF-8", TRUE, 0,
@@ -801,6 +802,7 @@ gst_teletextdec_parse_subtitles_page (GstTeletextDec * teletext,
   *text = subs->str;
   length = subs->len + 1;
   g_string_free (subs, FALSE);
+  g_free (line);
   return length;
 }
 
